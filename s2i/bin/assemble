@@ -1,11 +1,28 @@
-#!/bin/bash -e
+# repo root
+# |
+# |----local
+# 	|----webapps
+#		|----.war
+# 	|----bin
+#		|----setenv.sh
+#		|----catalina
+# 	|----conf
+#		|----server.xml
 #
-# S2I assemble script for the 'sample' image.
-# The 'assemble' script builds your application source so that it is ready to run.
 #
-# For more information refer to the documentation:
-#	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
-#
+# Copy setting file
+echo "Copying tomcat source code..."
+if [ -d /tmp/src/ ]; then
+	if $(ls /tmp/src/bin/* > /dev/null 2>&1); then
+		cp -pvr /tmp/src/bin/* /opt/jws-5.6/tomcat/bin/.
+	fi
+	if $(ls /tmp/src/conf/* > /dev/null 2>&1); then
+		cp -pvr /tmp/src/conf/* /opt/jws-5.6/tomcat/conf/.
+	fi
+fi
 
-echo "---> Installing application source..."
-cp -Rf /tmp/src/. ./
+# Delete source
+echo "Deleting source files..."
+rm -rf /tmp/src
+
+echo "...done"
